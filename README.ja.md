@@ -70,8 +70,8 @@ Get-FileHash .\CM-VideoTranscoder-1.0.0-setup.exe -Algorithm SHA256
 
 ```bash
 # 1. クローン
-git clone https://github.com/complex-mission/cm-video-transcoder.git
-cd cm-video-transcoder
+git clone https://github.com/complex-mission/video-transcoder.git
+cd video-transcoder
 
 # 2. 依存関係をインストール
 npm install
