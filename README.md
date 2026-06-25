@@ -20,7 +20,6 @@ Fine-grained control · Clean UI · Batch queue · Auto parallel · Hardware acc
 
 | Channel | Notes |
 |---------|-------|
-| [**Official site**](https://tc.complexmission.com) | Recommended — ready-to-use installer |
 | [**GitHub Releases**](../../releases) | Per-version installers and changelogs |
 
 The installer **bundles FFmpeg — no extra setup required**. Install and start transcoding right away.
