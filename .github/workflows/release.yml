@@ -1,0 +1,58 @@
+name: Release
+
+# 推送形如 v1.0 / v1.1.0 的 tag 时，自动构建并发布安装包到 Releases
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 仓库不含 ffmpeg 二进制，CI 时下载 GPL 构建并放入 resources/
+      - name: Download FFmpeg (GPL build)
+        shell: pwsh
+        run: |
+          $url = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip"
+          Invoke-WebRequest -Uri $url -OutFile ffmpeg.zip
+          Expand-Archive -Path ffmpeg.zip -DestinationPath ffmpeg-tmp -Force
+          $ffmpeg = Get-ChildItem -Path ffmpeg-tmp -Recurse -Filter ffmpeg.exe | Select-Object -First 1
+          $ffprobe = Get-ChildItem -Path ffmpeg-tmp -Recurse -Filter ffprobe.exe | Select-Object -First 1
+          Copy-Item $ffmpeg.FullName resources/ffmpeg.exe -Force
+          Copy-Item $ffprobe.FullName resources/ffprobe.exe -Force
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build installer
+        run: npm run dist
+
+      # 为安装包生成 SHA256 校验和，便于用户核对完整性（缓解未签名警告的信任问题）
+      - name: Generate SHA256 checksums
+        shell: pwsh
+        run: |
+          Get-ChildItem dist/*-setup.exe | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash
+            "$hash  $($_.Name)"
+          } | Out-File -FilePath dist/SHA256SUMS.txt -Encoding utf8
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*-setup.exe
+            dist/SHA256SUMS.txt
+          generate_release_notes: true

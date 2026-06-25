@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' file: data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+  <title>CM视频转码器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Main App -->
+  <div id="app">
+    <!-- Toolbar -->
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <div class="toolbar-brand">
+          <svg class="brand-logo" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="800" rx="153.5" ry="153.5" fill="#5030c4"/>
+            <path fill="#fff" d="M90.15,238.29h296.09l49.24,85.48h-98.47l-98.47,170.61,48.89,85.82h-98.47l-49.58-85.48,98.81-170.95h-98.81l-49.23-85.48Z"/>
+            <path fill="#fff" d="M729.85,323.77h-197.62l-98.47,170.95h197.28l-49.23,85.48h-197.62l-49.23-85.48,148.05-256.43h197.28l49.58,85.48Z"/>
+          </svg>
+          <span class="brand-name" data-i18n="app.name">CM视频转码器</span>
+          <span class="brand-version mono">v1.0</span>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <button id="btn-add-files" class="btn btn-primary">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span data-i18n="toolbar.addFiles">添加文件</span>
+        </button>
+        <button id="btn-cancel-all" class="btn btn-danger hidden">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+          <span data-i18n="toolbar.cancelAll">全部取消</span>
+        </button>
+        <button id="btn-clear-finished" class="btn btn-ghost hidden">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M1 3h10M4 3V2a1 1 0 011-1h2a1 1 0 011 1v1M9 3v7a1 1 0 01-1 1H4a1 1 0 01-1-1V3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+          <span data-i18n="toolbar.clearFinished">清空已完成</span>
+        </button>
+        <button id="btn-settings" class="btn btn-outline">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span data-i18n="toolbar.settings">设置</span>
+        </button>
+        <button id="link-help" class="btn btn-outline">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3.5a2 2 0 012 2c0 1-1 1.5-1.5 2-.3.3-.5.7-.5 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6" cy="9" r="0.5" fill="currentColor"/></svg></span>
+          <span data-i18n="toolbar.help">帮助</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Left: Task List -->
+      <div class="panel task-panel">
+        <div class="panel-header">
+          <span class="panel-title" data-i18n="panel.taskQueue">任务队列</span>
+          <span id="task-count" class="badge mono">0</span>
+        </div>
+        <div id="task-list" class="task-list">
+          <div id="pending-wrap"></div>
+          <div id="empty-state" class="empty-state">
+            <svg class="svg-icon svg-icon--xl" viewBox="0 0 48 48" fill="none">
+              <rect x="4" y="8" width="40" height="28" rx="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M20 16l12 8-12 8V16z" fill="currentColor" opacity="0.5"/>
+              <rect x="12" y="40" width="24" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+            </svg>
+            <p data-i18n="empty.dragOrClick">拖拽视频文件到此处，或点击此区域添加</p>
+            <p class="sub" data-i18n="empty.formats">支持 mp4 / mov / mkv · 最多 100 个文件</p>
+          </div>
+        </div>
+        <!-- Global Progress -->
+        <div id="global-progress" class="global-progress hidden">
+          <div class="progress-info">
+            <span id="global-status" data-i18n="progress.preparing">准备中...</span>
+            <span id="global-percent" class="mono">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div id="global-progress-fill" class="progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Config Panel -->
+      <div class="panel config-panel">
+        <div class="panel-header">
+          <span class="panel-title" data-i18n="panel.transcodeParams">转码参数</span>
+        </div>
+        <div class="config-body">
+          <!-- Output Container -->
+          <div class="config-group">
+            <label class="config-label"><span data-i18n="label.outputContainer">输出容器</span><button class="help-tip" data-help="container" data-i18n-title="helpTip.title" title="说明">?</button></label>
+            <div class="btn-group" id="container-group">
+              <button class="btn-toggle active" data-value="mp4">MP4</button>
+              <button class="btn-toggle" data-value="mov">MOV</button>
+              <button class="btn-toggle" data-value="webm">WebM</button>
+            </div>
+          </div>
+
+          <!-- Video Encoder -->
+          <div class="config-group">
+            <label class="config-label"><span data-i18n="label.videoEncoder">视频编码器</span><button class="help-tip" data-help="encoder" data-i18n-title="helpTip.title" title="说明">?</button></label>
+            <div class="btn-group" id="encoder-group">
+              <button class="btn-toggle active" data-value="h264">H.264</button>
+              <button class="btn-toggle" data-value="h265">H.265</button>
+              <button class="btn-toggle hidden" data-value="vp9">VP9</button>
+              <button class="btn-toggle hidden" data-value="av1">AV1</button>
+            </div>
+            <div id="compat-badge" class="compat-badge">全平台浏览器</div>
+          </div>
+
+          <!-- Quality -->
+          <div class="config-group section-start">
+            <label class="config-label"><span data-i18n="label.quality">画质</span><button class="help-tip" data-help="quality" data-i18n-title="helpTip.title" title="说明">?</button></label>
+            <div class="btn-group" id="quality-group">
+              <button class="btn-toggle" data-value="high" data-i18n="quality.high">高画质</button>
+              <button class="btn-toggle active" data-value="medium" data-i18n="quality.medium">中等</button>
+              <button class="btn-toggle" data-value="low" data-i18n="quality.low">小体积</button>
+              <button class="btn-toggle" data-value="custom" data-i18n="quality.custom">自定义</button>
+            </div>
+            <div id="crf-slider-wrap" class="slider-wrap hidden">
+              <div class="slider-col">
+                <input type="range" id="crf-slider" min="0" max="100" value="70" class="slider">
+                <div id="crf-ruler" class="crf-ruler"></div>
+              </div>
+              <span id="crf-value" class="slider-value mono">70%</span>
+            </div>
+            <div id="crf-hint" class="resolution-hint hidden" data-i18n="quality.crfHint">数值越高画质越好、体积越大</div>
+          </div>
+
+          <!-- Preset -->
+          <div class="config-group" id="preset-group-wrap">
+            <label class="config-label"><span data-i18n="label.preset">编码速度</span><button class="help-tip" data-help="preset" data-i18n-title="helpTip.title" title="说明">?</button></label>
+            <select id="preset-select" class="select" data-i18n-opts='{"ultrafast":"preset.ultrafast","superfast":"preset.superfast","veryfast":"preset.veryfast","faster":"preset.faster","fast":"preset.fast","medium":"preset.medium","slow":"preset.slow","slower":"preset.slower","veryslow":"preset.veryslow"}'>
+              <option value="ultrafast" data-i18n="preset.ultrafast">极速（最快，体积最大）</option>
+              <option value="superfast" data-i18n="preset.superfast">超快</option>
+              <option value="veryfast" data-i18n="preset.veryfast">很快</option>
+              <option value="faster" data-i18n="preset.faster">较快</option>
+              <option value="fast" data-i18n="preset.fast">快速</option>
+              <option value="medium" selected data-i18n="preset.medium">中等（默认）</option>
+              <option value="slow" data-i18n="preset.slow">较慢</option>
+              <option value="slower" data-i18n="preset.slower">更慢</option>
+              <option value="veryslow" data-i18n="preset.veryslow">极慢（最小体积）</option>
+            </select>
+          </div>
+
+          <!-- Hardware acceleration -->
+          <div class="config-group hidden" id="hwaccel-group-wrap">
+            <label class="config-label"><span data-i18n="label.hwaccel">硬件加速</span><button class="help-tip" data-help="hwaccel" data-i18n-title="helpTip.title" title="说明">?</button></label>
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="hwaccel-toggle">
+              <span data-i18n="hwaccel.enable">启用 GPU 硬件编码（更快）</span>
+            </label>
+            <div id="hwaccel-device" class="resolution-hint" style="margin-top:6px"></div>
+          </div>
+
+          <!-- Resolution -->
+          <div class="config-group section-start">
+            <label class="config-label"><span data-i18n="label.resolution">分辨率</span></label>
+            <select id="resolution-select" class="select">
+              <option value="original" selected data-i18n="resolution.original">保持原始</option>
+              <option value="2160">2160p (3840x2160)</option>
+              <option value="1440">1440p (2560x1440)</option>
+              <option value="1080">1080p (1920x1080)</option>
+              <option value="720">720p (1280x720)</option>
+              <option value="480">480p (854x480)</option>
+              <option value="custom" data-i18n="resolution.custom">自定义...</option>
+            </select>
+            <div id="resolution-custom-wrap" class="resolution-custom-wrap hidden">
+              <input type="text" id="res-width" class="input" data-i18n-ph="resolution.widthPlaceholder" placeholder="宽" inputmode="numeric" maxlength="4">
+              <button id="res-lock" class="res-lock active" data-i18n-title="resolution.lockAspect" title="锁定宽高比">
+                <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><rect x="2.5" y="5.3" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.1"/><path d="M4 5.3V4a2 2 0 014 0v1.3" stroke="currentColor" stroke-width="1.1"/></svg></span>
+              </button>
+              <input type="text" id="res-height" class="input" data-i18n-ph="resolution.heightPlaceholder" placeholder="高" inputmode="numeric" maxlength="4">
+              <span class="sep">px</span>
+            </div>
+            <div id="resolution-hint" class="resolution-hint hidden"></div>
+          </div>
+
+          <!-- Deinterlace -->
+          <div class="config-group">
+            <label class="config-label"><span data-i18n="label.deinterlace">反交错</span><button class="help-tip" data-help="deinterlace" data-i18n-title="helpTip.title" title="说明">?</button></label>
+            <div class="btn-group" id="deinterlace-group">
+              <button class="btn-toggle active" data-value="smart" data-i18n="deinterlace.smart">智能</button>
+              <button class="btn-toggle" data-value="force" data-i18n="deinterlace.force">强制</button>
+              <button class="btn-toggle" data-value="none" data-i18n="deinterlace.none">不处理</button>
+            </div>
+          </div>
+
+          <!-- Audio -->
+          <div class="config-group section-start">
+            <label class="config-label"><span data-i18n="label.audio">音频</span><button class="help-tip" data-help="audio" data-i18n-title="helpTip.title" title="说明">?</button></label>
+            <div class="audio-row">
+              <label class="checkbox-wrap">
+                <input type="checkbox" id="audio-enabled" checked>
+                <span data-i18n="audio.include">包含音频</span>
+              </label>
+              <label class="checkbox-wrap" id="audio-copy-wrap">
+                <input type="checkbox" id="audio-copy">
+                <span data-i18n="audio.copy">直接复制</span>
+              </label>
+            </div>
+            <div id="audio-bitrate-wrap">
+              <label class="config-label sub-label" id="audio-bitrate-label" data-i18n="audio.bitrateLabel">音频码率</label>
+              <select id="audio-bitrate" class="select">
+                <option value="96">96 kbps</option>
+                <option value="128" selected>128 kbps</option>
+                <option value="160">160 kbps</option>
+                <option value="192">192 kbps</option>
+                <option value="256">256 kbps</option>
+                <option value="320">320 kbps</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Preview Card -->
+          <div id="preview-card" class="preview-card hidden">
+            <div class="preview-header" data-i18n="preview.header">输出预览</div>
+            <div id="preview-content" class="preview-content"></div>
+          </div>
+
+          <!-- Start Button -->
+          <button id="btn-start" class="btn btn-start hidden">
+            <span class="svg-icon"><svg viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="currentColor"/></svg></span>
+            <span data-i18n="btn.startTranscode">开始转码</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 data-i18n="settings.title">设置</h2>
+        <button id="btn-close-settings" class="btn btn-ghost">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="config-group">
+          <label class="config-label" data-i18n="settings.language">语言</label>
+          <select id="setting-language" class="select">
+            <option value="zh">中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+          </select>
+        </div>
+        <div class="config-group">
+          <label class="config-label" data-i18n="settings.outputDir">输出文件夹</label>
+          <div class="input-row">
+            <input type="text" id="setting-output-dir" class="input" data-i18n-ph="settings.outputDirPlaceholder" placeholder="默认与源文件相同目录">
+            <button id="btn-select-output" class="btn btn-outline" data-i18n="settings.browse">浏览</button>
+          </div>
+        </div>
+        <div class="config-group">
+          <label class="config-label"><span data-i18n="settings.parallelMode">并行模式</span><button class="help-tip" data-help="parallel" data-i18n-title="helpTip.title" title="说明">?</button></label>
+          <div class="btn-group" id="parallel-mode-group">
+            <button class="btn-toggle active" data-value="auto" data-i18n="settings.parallelAuto">自动</button>
+            <button class="btn-toggle" data-value="manual" data-i18n="settings.parallelManual">手动</button>
+          </div>
+          <div id="parallel-count-wrap" class="hidden">
+            <label class="config-label sub-label" data-i18n="settings.parallelCount">并行任务数</label>
+            <input type="number" id="parallel-count" class="input" min="1" max="16" value="2">
+          </div>
+        </div>
+        <div class="config-group">
+          <label class="config-label" data-i18n="settings.filenameTemplate">文件名模板</label>
+          <input type="text" id="setting-template" class="input" placeholder="{name}_{encoder}">
+          <div class="resolution-hint" style="margin-top:8px" data-i18n-html="settings.templateVars">
+            可用变量：<span class="mono">{name}</span> 原文件名 ·
+            <span class="mono">{encoder}</span> 编码器 ·
+            <span class="mono">{container}</span> 容器 ·
+            <span class="mono">{height}</span> 高度 ·
+            <span class="mono">{width}</span> 宽度 ·
+            <span class="mono">{quality}</span> 画质 ·
+            <span class="mono">{date}</span> 日期 ·
+            <span class="mono">{time}</span> 时间
+          </div>
+          <div id="template-preview" class="resolution-hint" style="margin-top:6px"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-save-settings" class="btn btn-primary" data-i18n="settings.save">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="help-modal" class="modal help-modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 data-i18n="help.title">帮助</h2>
+        <button id="btn-close-help" class="btn btn-ghost">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="help-section">
+          <h3>
+            <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3.5a2 2 0 012 2c0 1-1 1.5-1.5 2-.3.3-.5.7-.5 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="6" cy="9" r="0.5" fill="currentColor"/></svg></span>
+            <span data-i18n="help.about">关于</span>
+          </h3>
+          <p data-i18n="help.aboutText">CM视频转码器是一款轻量级桌面视频转码工具，支持将 MP4、MOV、MKV 视频转换为浏览器兼容的格式。基于 FFmpeg 内核，支持 H.264、H.265、VP9、AV1 编码，提供批量转码与实时进度监控。</p>
+        </div>
+        <div class="help-section">
+          <h3>
+            <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M1 2h10M1 6h10M1 10h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+            <span data-i18n="help.faq">常见问题</span>
+          </h3>
+          <ul>
+            <li data-i18n-html="help.faqSlow"><b>转码速度慢</b>：编码速度（preset）设为 faster/veryfast 可加快速度，但文件体积会增大。H.265 比 H.264 慢约 2-3 倍。</li>
+            <li data-i18n-html="help.faqLarge"><b>输出文件过大</b>：降低画质（选择"小体积"或调低 CRF 值），或降低分辨率。</li>
+            <li data-i18n-html="help.faqIncompat"><b>播放不兼容</b>：H.265/VP9/AV1 在部分旧浏览器中不支持，建议选择 H.264 + MP4 获得最佳兼容性。</li>
+            <li data-i18n-html="help.faqAudioSync"><b>音频不同步</b>：尝试勾选"直接复制"音频选项，避免重编码。</li>
+            <li data-i18n-html="help.faqFailed"><b>转码失败</b>：检查源文件是否损坏，尝试更换编码器或降低分辨率。</li>
+            <li data-i18n-html="help.faqDrag"><b>拖放无反应</b>：确保拖入的是 mp4/mov/mkv 格式文件，最多支持 100 个文件同时添加。</li>
+          </ul>
+        </div>
+        <div class="help-section">
+          <h3>
+            <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M2 3l4 3 4-3M1 3v6a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H2a1 1 0 00-1 1z" stroke="currentColor" stroke-width="1.2"/></svg></span>
+            <span data-i18n="help.resolution">分辨率说明</span>
+          </h3>
+          <p data-i18n="help.resolutionText">标准分辨率（如 1080p、720p）编码效率最优。自定义非标准分辨率（如 1920x800）可用于裁剪或适配特殊显示设备，编码器会自动处理，对速度影响极小，但部分硬件播放器可能不支持非标准尺寸。</p>
+        </div>
+        <div class="help-section">
+          <h3>
+            <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1l4 2v3c0 2.5-1.7 4.3-4 5-2.3-.7-4-2.5-4-5V3l4-2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>
+            <span data-i18n="help.privacy">隐私与许可</span>
+          </h3>
+          <p data-i18n-html="help.privacyText"><b>隐私</b>：本软件为纯本地工具，<b>不收集、不上传任何数据</b>，所有视频与转码均在你的电脑上完成。仅当你主动点击「官方网站 / 问题反馈 / 备案号」时，才会用系统浏览器打开对应网页。</p>
+          <p data-i18n-html="help.licenseText"><b>开源许可</b>：本软件以 <a data-ext="https://www.gnu.org/licenses/gpl-3.0.html">GNU GPL-3.0</a> 协议免费开源发布。你可以自由使用、修改和分发，但衍生作品须同样以 GPL 开源。</p>
+          <p data-i18n-html="help.ffmpegText"><b>FFmpeg</b>：转码内核为 <a data-ext="https://ffmpeg.org">FFmpeg</a>（GPLv3，含 x264/x265 等组件），版权归 FFmpeg 开发者所有，源码见 <a data-ext="https://ffmpeg.org/download.html">ffmpeg.org</a>。</p>
+          <p data-i18n-html="help.fontText"><b>字体</b>：界面使用 <a data-ext="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a>（SIL Open Font License 1.1）与小米 <a data-ext="https://hyperos.mi.com/font/zh/">MiSans</a>（MiSans 字体许可协议，免费商用），版权分别归各自作者所有。</p>
+          <p data-i18n-html="help.disclaimerText"><b>免责声明</b>：本软件按「现状」提供，不附带任何明示或默示担保。请确保你对所处理的视频拥有合法权利；因使用本软件产生的任何后果由使用者自行承担。</p>
+        </div>
+      </div>
+      <div class="help-footer">
+        <div class="help-footer-brand">
+          <svg class="help-footer-logo" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="800" rx="153.5" ry="153.5" fill="#5030c4"/>
+            <path fill="#fff" d="M90.15,238.29h296.09l49.24,85.48h-98.47l-98.47,170.61,48.89,85.82h-98.47l-49.58-85.48,98.81-170.95h-98.81l-49.23-85.48Z"/>
+            <path fill="#fff" d="M729.85,323.77h-197.62l-98.47,170.95h197.28l-49.23,85.48h-197.62l-49.23-85.48,148.05-256.43h197.28l49.58,85.48Z"/>
+          </svg>
+          <span class="help-footer-name" data-i18n="app.name">CM视频转码器</span>
+          <span class="help-footer-ver mono">v1.0</span>
+        </div>
+        <div class="help-footer-links">
+          <a data-ext="https://tc.complexmission.com" data-i18n="help.officialSite">官方网站</a>
+          <span class="help-footer-sep">·</span>
+          <a data-ext="https://tc.complexmission.com/feedback/" data-i18n="help.feedback">问题反馈</a>
+          <span class="help-footer-sep">·</span>
+          <span class="help-footer-muted" data-i18n="help.basedOnFFmpeg">基于 FFmpeg</span>
+        </div>
+        <div class="help-footer-copy" id="footer-copy">© 2014–2026 Complex Mission. 保留所有权利。</div>
+        <div class="help-footer-beian">
+          <a data-ext="https://beian.miit.gov.cn/">辽ICP备14002389号-7</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Capture (截帧) Modal -->
+  <div id="capture-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 data-i18n="capture.title">截帧</h2>
+        <button id="btn-close-capture" class="btn btn-ghost">
+          <span class="svg-icon svg-icon--sm"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="capture-preview">
+          <img id="capture-img" alt="">
+          <div id="capture-loading" class="capture-loading"><span data-i18n="capture.loading">加载中…</span></div>
+        </div>
+        <div class="capture-time">
+          <input type="range" id="capture-slider" min="0" max="100" value="0" step="0.1" class="slider">
+          <span id="capture-time-label" class="mono">00:00:00</span>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between">
+        <div class="btn-group" id="capture-format-group">
+          <button class="btn-toggle active" data-value="png">PNG</button>
+          <button class="btn-toggle" data-value="webp">WebP</button>
+          <button class="btn-toggle" data-value="jpg">JPG</button>
+        </div>
+        <button id="btn-capture-save" class="btn btn-primary" data-i18n="capture.saveAsImage">保存为图片</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 说明气泡 -->
+  <div id="help-popover" class="help-popover hidden"></div>
+
+  <!-- Toast 容器 -->
+  <div id="toast-container"></div>
+
+  <script src="i18n.js"></script>
+  <script src="constants.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

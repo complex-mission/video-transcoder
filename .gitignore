@@ -1,0 +1,30 @@
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+dist-electron/
+out/
+build/
+
+# 捆绑的二进制（体积大，需单独下载，见 resources/README.md）
+*.exe
+*.dll
+*.dylib
+
+# Claude Code
+.claude/
+
+# 日志
+*.log
+npm-debug.log*
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 产品介绍网站
+website/

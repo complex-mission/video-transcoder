@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>CM视频转码器</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #131313;
+      overflow: hidden;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .wrap {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 18px;
+      font-family: "Segoe UI", "Yu Gothic UI", "Malgun Gothic", "Microsoft YaHei", sans-serif;
+      border: 1px solid #3a3a3a;
+      background: #131313;
+    }
+    .logo { width: 56px; height: 56px; }
+    .title { font-size: 20px; font-weight: 700; color: #e2e2e2; letter-spacing: 1px; }
+    .version { font-size: 12px; color: #6e6e6e; font-family: Consolas, monospace; }
+    .spinner {
+      width: 26px; height: 26px; margin-top: 6px;
+      border: 2px solid rgba(255,255,255,0.12);
+      border-top-color: #5030c4;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .status { font-size: 12px; color: #a2a2a2; margin-top: 2px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+      <rect width="800" height="800" rx="153.5" ry="153.5" fill="#5030c4"/>
+      <path fill="#fff" d="M90.15,238.29h296.09l49.24,85.48h-98.47l-98.47,170.61,48.89,85.82h-98.47l-49.58-85.48,98.81-170.95h-98.81l-49.23-85.48Z"/>
+      <path fill="#fff" d="M729.85,323.77h-197.62l-98.47,170.95h197.28l-49.23,85.48h-197.62l-49.23-85.48,148.05-256.43h197.28l49.58,85.48Z"/>
+    </svg>
+    <div class="title">CM视频转码器</div>
+    <div class="version">v1.0</div>
+    <div class="spinner"></div>
+    <div class="status">正在启动…</div>
+  </div>
+  <script>
+    (function () {
+      var STR = {
+        zh: { name: 'CM视频转码器', status: '正在启动…' },
+        en: { name: 'CM TransCoder', status: 'Starting…' },
+        ja: { name: 'CM トランスコーダー', status: '起動中…' },
+        ko: { name: 'CM 트랜스코더', status: '시작 중…' }
+      };
+      function detect() {
+        // 跟随用户已保存的语言；无记忆时默认英文（与主程序一致）
+        var saved;
+        try { saved = localStorage.getItem('cm-lang'); } catch (e) { /* ignore */ }
+        if (saved && STR[saved]) return saved;
+        return 'en';
+      }
+      var lang = detect();
+      var s = STR[lang];
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+      document.title = s.name;
+      document.querySelector('.title').textContent = s.name;
+      document.querySelector('.status').textContent = s.status;
+    })();
+  </script>
+</body>
+</html>

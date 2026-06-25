@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 800 800">
+  <defs>
+    <style>
+      .st0 {
+        fill: #5030c4;
+      }
+
+      .st1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1">
+    <g id="Layer_11">
+      <rect class="st0" width="800" height="800" rx="153.5" ry="153.5"/>
+    </g>
+  </g>
+  <g id="Layer_2">
+    <g>
+      <path class="st1" d="M90.15,238.29h296.09l49.24,85.48h-98.47l-98.47,170.61,48.89,85.82h-98.47l-49.58-85.48,98.81-170.95h-98.81l-49.23-85.48Z"/>
+      <path class="st1" d="M729.85,323.77h-197.62l-98.47,170.95h197.28l-49.23,85.48h-197.62l-49.23-85.48,148.05-256.43h197.28l49.58,85.48Z"/>
+    </g>
+  </g>
+</svg>

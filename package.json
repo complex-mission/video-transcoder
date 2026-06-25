@@ -1,0 +1,51 @@
+{
+  "name": "video-transcoder",
+  "version": "1.0.0",
+  "description": "Windows 视频转码工具 — 将 mp4/mov/mkv 转为浏览器兼容格式",
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win",
+    "dist:dir": "electron-builder --win --dir"
+  },
+  "author": "Complex Mission",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "electron": "^42.5.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.videotranscoder.app",
+    "productName": "CM Video Transcoder",
+    "win": {
+      "target": "nsis",
+      "icon": "resources/icon.ico",
+      "forceCodeSigning": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "CM Video Transcoder",
+      "artifactName": "CM-VideoTranscoder-${version}-setup.exe",
+      "installerLanguages": ["en_US"],
+      "language": "1033",
+      "multiLanguageInstaller": false,
+      "displayLanguageSelector": false
+    },
+    "files": [
+      "src/**/*",
+      "!src/**/*.test.js"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/",
+        "to": ".",
+        "filter": ["**/*"]
+      }
+    ],
+    "asar": true
+  }
+}
