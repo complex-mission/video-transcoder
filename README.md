@@ -16,12 +16,6 @@ Fine-grained control · Clean UI · Batch queue · Auto parallel · Hardware acc
 
 ---
 
-> **End users**: No need to build it yourself — download a ready-to-use installer from the [**official site**](https://tc.complexmission.com).
->
-> **Developers / want to build from source**: read on.
-
----
-
 ## Download & Install
 
 | Channel | Notes |
