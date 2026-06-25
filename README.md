@@ -10,8 +10,6 @@ Fine-grained control · Clean UI · Batch queue · Auto parallel · Hardware acc
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078D6.svg)]()
 [![Electron](https://img.shields.io/badge/Electron-42-47848F.svg)]()
 
-[**Official site → tc.complexmission.com**](https://tc.complexmission.com)
-
 **English** · [中文](README.zh.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
 </div>
