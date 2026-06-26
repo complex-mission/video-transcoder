@@ -16,14 +16,6 @@ Fine-grained control · Clean UI · Batch queue · Auto parallel · Hardware acc
 
 ---
 
-## ScreenShot
-![Main Interface - Task Queue & Transcoding Parameters](1-en.webp)
-![Settings - Output Directory, Parallel Mode, Filename Template](2-en.webp)
-![Output Preview - Source vs Output Technical Specs Comparison](3-en.webp)
-![Batch Transcoding - Multi-task Parallel Processing](4-en.webp)
-
----
-
 ## Download & Install
 
 | Channel | Notes |
@@ -31,6 +23,14 @@ Fine-grained control · Clean UI · Batch queue · Auto parallel · Hardware acc
 | [**GitHub Releases**](../../releases) | Per-version installers and changelogs |
 
 The installer **bundles FFmpeg — no extra setup required**. Install and start transcoding right away.
+
+---
+
+## ScreenShot
+![Main Interface - Task Queue & Transcoding Parameters](1-en.webp)
+![Settings - Output Directory, Parallel Mode, Filename Template](2-en.webp)
+![Output Preview - Source vs Output Technical Specs Comparison](3-en.webp)
+![Batch Transcoding - Multi-task Parallel Processing](4-en.webp)
 
 ---
 
