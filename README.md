@@ -143,6 +143,6 @@ Because it bundles GPLv3 FFmpeg, the distribution as a whole is under GPL-3.0.
 
 <div align="center">
 
-Built by [Complex Mission](https://tc.complexmission.com) · learn more at the [**official site**](https://tc.complexmission.com)
+Built by [Complex Mission](https://tc.complexmission.com/zh/) · learn more at the [**official site**](https://tc.complexmission.com/zh/)
 
 </div>
