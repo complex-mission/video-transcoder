@@ -143,6 +143,6 @@ resources/       图标、字体（ffmpeg 需自行放入）
 
 <div align="center">
 
-由 [Complex Mission](https://tc.complexmission.com) 开发 · 更多请访问 [**官方网站**](https://tc.complexmission.com)
+由 [Complex Mission](https://tc.complexmission.com/zh/) 开发 · 更多请访问 [**官方网站**](https://tc.complexmission.com/zh/)
 
 </div>
