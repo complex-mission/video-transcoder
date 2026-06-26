@@ -16,6 +16,14 @@ Fine-grained control · Clean UI · Batch queue · Auto parallel · Hardware acc
 
 ---
 
+## ScreenShot
+![Main Interface - Task Queue & Transcoding Parameters](1-en.webp)
+![Settings - Output Directory, Parallel Mode, Filename Template](2-en.webp)
+![Output Preview - Source vs Output Technical Specs Comparison](3-en.webp)
+![Batch Transcoding - Multi-task Parallel Processing](4-en.webp)
+
+---
+
 ## Download & Install
 
 | Channel | Notes |
